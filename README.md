@@ -1,8 +1,8 @@
 # Ohio State Shot Planner
 
-An independent, interactive shot-allocation scenario tool for Ohio State men's basketball. Pick an opponent and court area, compare two current Buckeyes, and move a fixed set of 12 field-goal attempts between them. The app recalculates expected points, a visible sensitivity range, and a conditional go-to suggestion.
+An independent, interactive shot-allocation scenario tool for Ohio State men's basketball. The full-game optimizer assigns an exact number of two- and three-point attempts to each player on the current 15-man roster. A second lab compares two Buckeyes over 12 attempts in a selected court area.
 
-**Status:** first MVP, data checked **November 3, 2026**. The 2026–27 regular season had one published Ohio State game, at BYU on November 2. This is an exploration aid, not a prediction or an official Ohio State product.
+**Status:** interactive MVP, data checked **November 4, 2026**. The 2026–27 regular season had one published Ohio State game, at BYU on November 2. This is an exploration aid, not a prediction or an official Ohio State product.
 
 ## Run
 
@@ -11,7 +11,17 @@ npm install
 npm run dev
 ```
 
-Open the localhost URL shown by Vite. Use `npm run build` for the production build.
+Open the localhost URL shown by Vite. Use `npm run build`, `npm run lint`, and `npm run test` to verify the project.
+
+## Full-game shot plan
+
+The default scenario starts with the **60 field-goal attempts and 28 threes** in Ohio State's [November 2 BYU opener statistics](https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2026-27). Select an opponent, set the game shot totals, edit player availability, shooting rates, matchup adjustments, and per-player shot caps. The optimizer returns exact integer counts of twos, threes, and total shots for every roster player. It reports when the caps cannot accommodate the requested total.
+
+The algorithm maximizes **expected field-goal points under the entered assumptions**, not actual win probability. It uses a min-cost flow model with one unit for each possible shot, fixed team totals for twos and threes, player-specific shot-type caps, a shared per-player total cap, and an editable 0.8 percentage-point make-rate decline for each extra attempt of the same type. This decline models harder marginal shots; it is an assumption, not a measured Ohio State effect. A player without a BYU appearance starts unavailable until the user enables them. Alex Smith is therefore present but off by default.
+
+Mobley and Bynum use pooled Ohio State totals noted below. Other players who appeared against BYU use that one-game result shrunk toward **illustrative** 50% two-point and 34% three-point priors (30 and 20 prior attempts respectively); players with no regular-season appearance start at the priors alone. Those priors, all shot caps, and all matchup adjustments are editable assumptions. Opponent selection never applies a hidden rating. The comparison with the opener's shot mix appears only when the scenario uses the same 60 total attempts and 28 threes.
+
+The model excludes defensive scoring, free throws, turnovers, rebounds, playing time, shot creation, and actual opponent tendencies. It cannot yet make a defensible claim that its plan gives Ohio State the *best chance to win*. That would require a tested possession-level game model and reliable matchup/location data.
 
 ## What is sourced
 
