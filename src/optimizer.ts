@@ -152,3 +152,14 @@ export function optimizeShots(players: PlayerPlanInput[], total: number, threes:
 }
 
 export const openerAllocation: Allocation[] = initialRoster.map(p => ({ id: p.id, two: p.openerTwo, three: p.openerThree, expected: 0 }))
+
+// A comparison is valid only if the historical shot mix is still allowed by
+// the user's current availability and volume limits.
+export function planFitsCaps(players: PlayerPlanInput[], allocations: Allocation[]): boolean {
+  return allocations.every(item => {
+    const player = players.find(p => p.id === item.id)
+    if (!player || !Number.isInteger(item.two) || !Number.isInteger(item.three) || item.two < 0 || item.three < 0) return false
+    const shots = item.two + item.three
+    return (shots === 0 || player.available) && item.two <= player.maxTwo && item.three <= player.maxThree && shots <= player.maxTotal
+  })
+}
