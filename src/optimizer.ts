@@ -39,7 +39,7 @@ function withoutOpener(id: string, name: string, number: string): PlayerPlanInpu
 }
 
 // Roster and opener totals: official Ohio State pages, checked Nov 4, 2026.
-// The 2026-27 regular season had one game. These are scenario inputs, not projections.
+// The Nov 4, 2026 snapshot included one 2026-27 game. These are scenario inputs, not projections.
 export const initialRoster: PlayerPlanInput[] = [
   { id: 'mobley', name: 'John Mobley Jr.', number: '0', source: '2025–26 + BYU totals', openerTwo: 4, openerThree: 5, twoRate: 47.2, threeRate: 41.1, maxTwo: 15, maxThree: 15, maxTotal: 20, available: true, matchup: 0 },
   { id: 'bynum', name: 'Amare Bynum', number: '1', source: '2025–26 + BYU totals', openerTwo: 5, openerThree: 5, twoRate: 62.1, threeRate: 32.3, maxTwo: 17, maxThree: 12, maxTotal: 20, available: true, matchup: 0 },
