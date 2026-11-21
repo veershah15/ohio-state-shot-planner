@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import GamePlan from './GamePlan'
+import { easternDate, nextOpponentName, opponents } from './schedule'
 
 type Id = 'mobley' | 'bynum' | 'smith'
 type Shot = 'three' | 'two'
@@ -17,19 +18,12 @@ const zones: {id:string; label:string; type:Shot; pos:string}[] = [
   {id:'left-paint',label:'Left paint 2',type:'two',pos:'left-paint'},
   {id:'right-paint',label:'Right paint 2',type:'two',pos:'right-paint'},
 ]
-const opponents = [
-  {name:'Prairie View A&M',date:'Nov 16',note:'Scheduled home game'},
-  {name:'UMBC',date:'Nov 19',note:'Scheduled home game'},
-  {name:'Vanderbilt',date:'Nov 24',note:'Scheduled home game'},
-  {name:'Lipscomb',date:'Nov 29',note:'Scheduled home game'},
-  {name:'BYU',date:'Nov 2',note:'Opener: Ohio State lost 83–94'},
-]
 const initialRates = () => Object.fromEntries(ids.map(id => [id,{three:players[id].three,two:players[id].two}])) as Record<Id,Record<Shot,number>>
 const clamp = (n:number) => Math.min(99,Math.max(1,n))
 const format = (n:number) => n.toFixed(1)
 
 export default function App(){
-  const [opponent,setOpponent]=useState(opponents[0].name)
+  const [opponent,setOpponent]=useState(() => nextOpponentName(easternDate()))
   const [zoneId,setZoneId]=useState('left-wing')
   const [a,setA]=useState<Id>('mobley')
   const [b,setB]=useState<Id>('smith')
@@ -54,7 +48,7 @@ export default function App(){
   const changeRate=(id:Id,n:number)=>setRates(prev=>({...prev,[id]:{...prev[id],[zone.type]:clamp(n)}}))
   const reset=()=>{setRates(initialRates());setImpact({mobley:0,bynum:0,smith:0});setShotsA(6);setSwing(8)}
   return <div className="shell">
-    <header className="topbar"><div className="brand"><span className="brand-mark">O</span><strong>SHOT PLANNER</strong><i/><small>OHIO STATE MEN'S BASKETBALL</small></div><span className="topmeta"><b className="red-dot"/>2026–27 EARLY SEASON　/　SHOOTING INPUTS NOV 4 SNAPSHOT · SCHEDULE NOV 14</span></header>
+    <header className="topbar"><div className="brand"><span className="brand-mark">O</span><strong>SHOT PLANNER</strong><i/><small>OHIO STATE MEN'S BASKETBALL</small></div><span className="topmeta"><b className="red-dot"/>2026–27 EARLY SEASON　/　SHOOTING INPUTS NOV 4 SNAPSHOT · SCHEDULE NOV 21</span></header>
     <main>
       <div className="intro"><div><div className="eyebrow">OFFENSIVE SCENARIO LAB <span>/ 01</span></div><h1>HOW MANY SHOTS<br/><em>SHOULD EACH BUCKEYE TAKE?</em></h1><p>Build a full-game shot allocation, then test a specific court area and two-player decision below. Every result is conditional on visible assumptions.</p></div><div className="intro-right"><b>01 / 03</b><strong>BUILD A GAME PLAN</strong><span>Matchup → roster → shot counts</span></div></div>
       <GamePlan opponent={opponent} opponents={opponents} onOpponentChange={chooseOpponent}/>
@@ -79,7 +73,7 @@ export default function App(){
         </section>
       </div>
       <section className="takeaway"><div><div className="eyebrow">THE READOUT <span>/ SCENARIO ONLY</span></div><h2>The go-to look</h2><p><b>{players[leader].name}</b> has the highest adjusted {zone.type==='three'?'three-point':'two-point'} make rate for {zone.label.toLowerCase()} in this setup ({format(adjusted(leader))}%). {lead<3?'The margin is narrow, so treat this as a tie for planning.':'Test whether your scouting view supports the gap before shifting volume.'}</p></div><div className="stamp"><small>MODEL CALL</small><b>{lead<3?'CLOSE CALL':'#'+players[leader].no}</b><small>{opponent.toUpperCase()}</small></div></section>
-      <section className="methods"><button type="button" aria-expanded={methods} onClick={()=>setMethods(!methods)}><span>METHOD & SOURCES</span><b>{methods?'−':'+'}</b></button>{methods&&<div className="methods-body"><div><h3>How the number works</h3><p>The 12-shot possession lab uses shots by player × adjusted make rate × shot value. Its comparison uses a 6/6 split with the same inputs. It excludes free throws, rebounds, turnovers, fatigue, defensive adaptation, and changing shot quality as volume grows. A higher expected value is conditional on entered rates.</p><p>Historical 2PT rates are derived as (FGM − 3PTM) ÷ (FGA − 3PTA). Mobley and Bynum pool 2025–26 regular-season totals with the Nov 2, 2026 BYU opener. Alex Smith had no listed attempts in the November 4 regular-season snapshot; his initial 34% / 52% values in this lab are editable illustration assumptions. Opponent adjustments are also assumptions. No real win probability is shown because this evidence cannot support one.</p></div><div><h3>Primary sources · dated snapshots</h3><ul><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/roster" target="_blank" rel="noreferrer">Official 2026–27 roster ↗</a> — names checked Nov 4</li><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2025-26" target="_blank" rel="noreferrer">Official 2025–26 cumulative stats ↗</a> — historical totals checked Nov 4</li><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2026-27" target="_blank" rel="noreferrer">Official 2026–27 cumulative stats ↗</a> — opener snapshot checked Nov 4</li><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/schedule" target="_blank" rel="noreferrer">Official 2026–27 schedule ↗</a> — opponent choices checked Nov 14</li></ul><p>Opponent selection labels a scenario; it does not add defensive data. No tracking or shot-coordinate data is used.</p></div></div>}</section>
+      <section className="methods"><button type="button" aria-expanded={methods} onClick={()=>setMethods(!methods)}><span>METHOD & SOURCES</span><b>{methods?'−':'+'}</b></button>{methods&&<div className="methods-body"><div><h3>How the number works</h3><p>The 12-shot possession lab uses shots by player × adjusted make rate × shot value. Its comparison uses a 6/6 split with the same inputs. It excludes free throws, rebounds, turnovers, fatigue, defensive adaptation, and changing shot quality as volume grows. A higher expected value is conditional on entered rates.</p><p>Historical 2PT rates are derived as (FGM − 3PTM) ÷ (FGA − 3PTA). Mobley and Bynum pool 2025–26 regular-season totals with the Nov 2, 2026 BYU opener. Alex Smith had no listed attempts in the November 4 regular-season snapshot; his initial 34% / 52% values in this lab are editable illustration assumptions. Opponent adjustments are also assumptions. No real win probability is shown because this evidence cannot support one.</p></div><div><h3>Primary sources · dated snapshots</h3><ul><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/roster" target="_blank" rel="noreferrer">Official 2026–27 roster ↗</a> — names checked Nov 4</li><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2025-26" target="_blank" rel="noreferrer">Official 2025–26 cumulative stats ↗</a> — historical totals checked Nov 4</li><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2026-27" target="_blank" rel="noreferrer">Official 2026–27 cumulative stats ↗</a> — opener snapshot checked Nov 4</li><li><a href="https://ohiostatebuckeyes.com/sports/mens-basketball/schedule" target="_blank" rel="noreferrer">Official 2026–27 schedule ↗</a> — opponent choices checked Nov 21</li></ul><p>Opponent selection labels a scenario; it does not add defensive data. No tracking or shot-coordinate data is used.</p></div></div>}</section>
     </main><footer><span>OHIO STATE SHOT PLANNER</span><span>INDEPENDENT STUDENT PROJECT · NOT AFFILIATED WITH OHIO STATE ATHLETICS</span><span>BUILT FOR QUESTIONS, NOT CERTAINTY</span></footer>
   </div>
 }

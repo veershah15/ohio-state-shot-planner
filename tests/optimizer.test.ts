@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { initialRoster, openerAllocation, optimizeShots, planFitsCaps, type PlayerPlanInput } from '../src/optimizer.ts'
+import { easternDate, nextOpponentName } from '../src/schedule.ts'
 
 test('full-game plan assigns exactly the requested two and three attempts within every cap', () => {
   const result = optimizeShots(initialRoster, 60, 28, 0.8)
@@ -38,4 +39,11 @@ test('opener comparison is unavailable when current availability or caps exclude
   assert.equal(planFitsCaps(unavailable, openerAllocation), false)
   const capped = initialRoster.map(p => p.id === 'mobley' ? { ...p, maxThree: 4 } : p)
   assert.equal(planFitsCaps(capped, openerAllocation), false)
+})
+
+test('default opponent advances to the next scheduled game in Eastern time', () => {
+  assert.equal(nextOpponentName('2026-11-21'), 'Vanderbilt')
+  assert.equal(nextOpponentName('2026-11-25'), 'Lipscomb')
+  assert.equal(nextOpponentName('2026-12-31'), 'BYU')
+  assert.equal(easternDate(new Date('2026-11-25T02:00:00Z')), '2026-11-24')
 })

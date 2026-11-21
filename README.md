@@ -2,7 +2,7 @@
 
 An independent, interactive shot-allocation scenario tool for Ohio State men's basketball. The full-game optimizer assigns an exact number of two- and three-point attempts to each player on the current 15-man roster. A second lab compares two Buckeyes over 12 attempts in a selected court area.
 
-**Status:** interactive MVP. Shooting inputs are a **November 4, 2026 snapshot**, when the 2026–27 regular-season table included only the November 2 BYU opener. Opponent schedule choices were checked **November 14, 2026**. This is an exploration aid, not a prediction or an official Ohio State product.
+**Status:** interactive MVP. Shooting inputs are a **November 4, 2026 snapshot**, when the 2026–27 regular-season table included only the November 2 BYU opener. Opponent schedule choices were checked **November 21, 2026**. The default advances to the next listed game by Eastern date; once the dated list ends, it returns to the BYU example. This is an exploration aid, not a prediction or an official Ohio State product.
 
 ## Run
 
@@ -32,7 +32,7 @@ The model excludes defensive scoring, free throws, turnovers, rebounds, playing 
 | Bynum 2025–26 | 129/255 FG, 28/91 3PT | [Ohio State 2025–26 cumulative stats](https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2025-26) | Nov 3, 2026 |
 | Mobley at BYU | 4/9 FG, 2/5 3PT | [Ohio State 2026–27 cumulative stats](https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2026-27) | Nov 3, 2026 |
 | Bynum at BYU | 7/10 FG, 3/5 3PT | [Ohio State 2026–27 cumulative stats](https://ohiostatebuckeyes.com/sports/mens-basketball/stats/2026-27) | Nov 3, 2026 |
-| Schedule choices | Prairie View A&M, UMBC, Vanderbilt, Lipscomb, BYU | [Ohio State 2026–27 schedule](https://ohiostatebuckeyes.com/sports/mens-basketball/schedule) | Nov 14, 2026 |
+| Schedule choices | Vanderbilt through Oregon, plus the BYU opener | [Ohio State 2026–27 schedule](https://ohiostatebuckeyes.com/sports/mens-basketball/schedule) | Nov 21, 2026 |
 
 For Mobley and Bynum, the app pools 2025–26 totals and the opener. Three-point rate is combined 3PTM / 3PTA. Two-point rate is (combined FGM − combined 3PTM) / (combined FGA − combined 3PTA):
 
